@@ -33,6 +33,15 @@ function App() {
     );
   }, []);
 
+  // called when either To or From Currency changed
+  useEffect(() => {
+    if (fromCurrency != null && toCurrency != null) {
+      fetch(`${BASE_URL}?base=${fromCurrency}&symbols=${toCurrency}`)
+        .then(res => res.json())
+        .then(data => setExchangeRate(data.rates[toCurrency]));
+    }
+  }, [fromCurrency, toCurrency]);
+
   function handleFromAmountChange(e) {
     setAmount(e.target.value);
     setAmountInFromCurrency(true);
@@ -46,6 +55,7 @@ function App() {
   return (
     <>
       <h1>Convert</h1>
+      <p>Learned from https://www.youtube.com/watch?v=XN5elYWiSuw</p>
       <CurrencyRow
         currencyOptions={currencyOptions}
         selectedCurrency={fromCurrency}
